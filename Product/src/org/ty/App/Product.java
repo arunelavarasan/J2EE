@@ -8,14 +8,11 @@ import jakarta.servlet.GenericServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-public class Product extends HttpServlet{
+public class Product extends GenericServlet{
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	public void service(ServletRequest req, ServletResponse resp) throws ServletException, IOException {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		String pi = req.getParameter("pid");
@@ -30,18 +27,17 @@ public class Product extends HttpServlet{
 			pstmt = con.prepareStatement(inQry);
 			pstmt.setInt(1, pid);
 			pstmt.setString(2, nm);
-			pstmt.setString(3, qty);
-			pstmt.setString(4, price);
+			pstmt.setString(3, price);
+			pstmt.setString(4, qty);
 			pstmt.executeUpdate();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-	}
+		}
 		
 		PrintWriter output = resp.getWriter();
 		output.print("<html><body bgcolor='cyan'>" + "<h1>Successfully Stored into Database!!!" + "</h1>" + "<h2>Details are:-</h2>" + "<h4>Id="
 				+ pid + "</h4>" + "<h4>Product=" + nm + "</h4>" + "<h4>Quality=" + qty + "</h4>" +"<h4>Price=" + price + "" + "</h4></body></html>");
-	
-	}	
+	}
 }
